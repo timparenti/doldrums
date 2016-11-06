@@ -1,4 +1,6 @@
 <?php
+  require_once('season.inc.php');
+
   $now = time();
 
   # Set location and timezone.
@@ -16,20 +18,18 @@
     $year = date("Y", $now);
     $bounds = array( strtotime($year."-01-01 12:00"), strtotime($year."-12-31 12:00") );
     $print_year = $year;
-    # TODO: Calculate the solstice/equinox. For now, approximate to within ~3 hours.
-    $solstice = strtotime($year."-06-20 22:00 UTC + ".(6*($year%4))." hours");
-    $equinox = strtotime($year."-09-22 14:00 UTC + ".(6*($year%4))." hours");
+    $solstice = date_equisol($year,1);
+    $equinox = date_equisol($year,2);
   }
   else {
     $year = ( date("n", $now) >= 7 ? date("Y", $now) : date("Y", $now) - 1 );
     $bounds = array( strtotime($year."-07-01 12:00"), strtotime(($year+1)."-06-30 12:00") );
     $print_year = $year."-".($year+1);
-    # TODO: Calculate the solstice/equinox. For now, approximate to within ~3 hours.
-    $solstice = strtotime($year."-12-21 10:00 UTC + ".(6*($year%4))." hours");
-    $equinox = strtotime(($year+1)."-03-20 04:00 UTC + ".(6*(($year+1)%4))." hours");
+    $solstice = date_equisol($year,3);
+    $equinox = date_equisol($year+1,0);
   }
-  addFact("Winter solstice at approximately ".t($solstice), $solstice);
-  addFact("Spring equinox at approximately ".t($equinox), $equinox);
+  addFact("Winter solstice at ".t($solstice), $solstice);
+  addFact("Spring equinox at ".t($equinox), $equinox);
 
 
   # Detect DST discontinuities.
