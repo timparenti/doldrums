@@ -1,0 +1,36 @@
+<?php
+
+# Set location and timezone.
+#$lat = -33.87; $lon = 151.21; $tz = "Australia/Sydney";
+#$lat = 51.51; $lon = -0.13; $tz = "Europe/London";
+#$lat = -22.91; $lon = -43.17; $tz = "America/Sao_Paulo";
+#$lat = 69.65; $lon = 18.96; $tz = "Europe/Oslo";
+#$lat = 55.76; $lon = 37.62; $tz = "Europe/Moscow";
+#$lat = 42.00; $lon = -80.18; $tz = "America/New_York";
+$lat = 40.44; $lon = -79.95; $tz = "America/New_York";
+
+
+# Compute the facts.
+require_once('doldrums.php');
+computeFacts($lat, $lon, $tz);
+
+
+# Print the facts.
+echo "<pre>";
+echo "\nPOSITIVE THOUGHTS FOR THE DOLDRUMS OF ".$print_year;
+echo "\ncustomized to (lat ".$lat.", lon ".$lon.")\n";
+$d = $bounds[0];
+while ($d <= $bounds[1]) {
+  $i = date("Y-m-d", $d);
+  
+  if (count($facts[$i]) > 0) {
+    echo date("\nd F Y (D)", $d);
+    foreach ($facts[$i] as $fact) {
+      echo "\n  - ".$fact;
+    }
+  }
+  $d = strtotime("+1 day", $d);
+}
+echo "</pre>";
+
+?>

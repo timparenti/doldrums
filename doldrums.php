@@ -1,16 +1,10 @@
 <?php
+function computeFacts($lat, $lon, $tz) {
+  global $print_year, $bounds, $facts;
   require_once('season.inc.php');
 
+  date_default_timezone_set($tz);
   $now = time();
-
-  # Set location and timezone.
-  #$lat = -33.87; $lon = 151.21; date_default_timezone_set("Australia/Sydney");
-  #$lat = 51.51; $lon = -0.13; date_default_timezone_set("Europe/London");
-  #$lat = -22.91; $lon = -43.17; date_default_timezone_set("America/Sao_Paulo");
-  #$lat = 69.65; $lon = 18.96; date_default_timezone_set("Europe/Oslo");
-  #$lat = 55.76; $lon = 37.62; date_default_timezone_set("Europe/Moscow");
-  #$lat = 42.00; $lon = -80.18; date_default_timezone_set("America/New_York");
-  $lat = 40.44; $lon = -79.95; date_default_timezone_set("America/New_York");
 
 
   # Determine the year in question, centered around the winter solstice.
@@ -156,25 +150,7 @@
   addMilestones("Day length is increasing by %dur% per day", $day_deltas, $day_deltas, 30, $solstice, $doldrums[1]);
   addMilestones("Sunrise is getting %dur% earlier each day", $rise_deltas, $rise_deltas, 30, $solstice, $doldrums[1], -1);
   addMilestones("Sunset is getting %dur% later each day", $set_deltas, $set_deltas, 30, $solstice, $doldrums[1]);
-
-
-
-  # Print the facts!
-  echo "--------------------";
-  echo "\nPOSITIVE THOUGHTS FOR THE DOLDRUMS OF ".$print_year;
-  echo "\ncustomized to (lat ".$lat.", lon ".$lon.")\n";
-  $d = $bounds[0];
-  while ($d <= $bounds[1]) {
-    $i = date("Y-m-d", $d);
-    
-    if (count($facts[$i]) > 0) {
-      echo date("\nd F Y (D)", $d);
-      foreach ($facts[$i] as $fact) {
-        echo "\n  - ".$fact;
-      }
-    }
-    $d = strtotime("+1 day", $d);
-  }
+}
 
 
   
