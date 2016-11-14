@@ -15,12 +15,15 @@ require_once('doldrums.php');
 computeFacts($lat, $lon, $tz);
 
 
+$start_date = strtotime(min(array_keys($facts)));
+$end_date = strtotime(max(array_keys($facts)));
+
 # Print the facts.
 echo "<pre>";
 echo "\nPOSITIVE THOUGHTS FOR THE DOLDRUMS OF ".$print_year;
 echo "\ncustomized to (lat ".$lat.", lon ".$lon.")\n";
-$d = $bounds[0];
-while ($d <= $bounds[1]) {
+$d = $start_date;
+while ($d <= $end_date) {
   $i = date("Y-m-d", $d);
   
   if (count($facts[$i]) > 0) {
