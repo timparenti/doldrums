@@ -42,7 +42,7 @@ while ($d <= strtotime("next Sunday", $end_date)) {
   }
 
   # Print the day.
-  echo "\n<td>";
+  echo "\n<td".( date("n", $d) % 2 == 0 ? " style=\"background-color: #eee;\"" : "" ).">";
   echo date("\nd F Y", $d);
   if (count($facts[$i]) > 0) {
     echo "\n<ul>";
