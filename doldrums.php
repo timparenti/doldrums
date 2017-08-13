@@ -193,19 +193,19 @@ function computeFacts($lat, $lon, $tz) {
     $dur = abs($dur);
     if ($dur >= 3600) {
       $h = intval($dur/3600);
-      $r .= $h."h ";
+      $r .= $h."h";
       $dur %= 3600;
       $m = intval($dur/60);
-      $r .= zPad($m,2)."'";
+      $r .= zPad($m,2)."&#x2032;";
       $dur %= 60;
     }
     else {
       $m = intval($dur/60);
-      $r .= $m."'";
+      $r .= $m."&#x2032;";
       $dur %= 60;
     }
     $s = $dur;
-    $r .= zPad($s,2)."\"";
+    $r .= zPad($s,2)."&#x2033;";
 
     return $r;
   }
