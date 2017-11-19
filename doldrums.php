@@ -249,5 +249,3 @@ function computeFacts($lat, $lon, $tz) {
   }
 
 ?>
-
-

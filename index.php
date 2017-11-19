@@ -1,3 +1,4 @@
+<html>
 <?php
 
 # Set location and timezone.
@@ -18,11 +19,23 @@ computeFacts($lat, $lon, $tz);
 $start_date = strtotime(min(array_keys($facts)));
 $end_date = strtotime(max(array_keys($facts)));
 
+echo "\n<head>";
+  echo "\n<title>Positive thoughts for the Doldrums of ".$print_year."</title>";
+?>
+<style>
+  #calendar .month-odd { background: #fff; }
+  #calendar .month-even { background: #eee; }
+</style>
+<?php
+echo "\n</head>";
+echo "\n<body>";
+echo "\n";
+
 # Print the facts.
 echo "<h2>POSITIVE THOUGHTS FOR THE DOLDRUMS OF ".$print_year."</h2>";
 echo "<h3>customized to (lat ".$lat.", lon ".$lon.")</h3>";
 
-echo "\n<table border=1>";
+echo "\n<table border=1 id=\"calendar\">";
 echo "\n<tr>";
 echo "\n<th>Monday</th>";
 echo "\n<th>Tuesday</th>";
@@ -42,7 +55,7 @@ while ($d <= strtotime("next Sunday", $end_date)) {
   }
 
   # Print the day.
-  echo "\n<td".( date("n", $d) % 2 == 0 ? " style=\"background-color: #eee;\"" : "" ).">";
+  echo "\n<td class=\"month-".( date("n", $d) % 2 == 0 ? "even" : "odd" )."\">";
   echo date("\nd F Y", $d);
   if (count($facts[$i]) > 0) {
     echo "\n<ul>";
@@ -62,4 +75,6 @@ while ($d <= strtotime("next Sunday", $end_date)) {
 }
 echo "</table>";
 
+echo "</body>";
 ?>
+</html>
