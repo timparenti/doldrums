@@ -94,8 +94,7 @@ function computeFacts($lat, $lon, $tz) {
 
     # Only make comparisons to yesterday when in the doldrums.  (Avoids nil references, really.)
     if ($d >= $doldrums[0]) {
-      # Define yesterday.
-      $y = date("Y-m-d", strtotime("-1 day", $d));
+      $y = prevDay($d);
 
       $rise_deltas[$i] = $rises['diff'][$i] - $rises['diff'][$y];
       $set_deltas[$i] = $sets['diff'][$i] - $sets['diff'][$y];
@@ -122,10 +121,6 @@ function computeFacts($lat, $lon, $tz) {
   $latest_rise_time = $rises['time'][end($latest_rise)];
   $earliest_set_time = $sets['time'][end($earliest_set)];
   $earliest_dusk_time = $dusks['time'][end($earliest_dusk)];
-  addFact("Latest dawn at ".t($latest_dawn_time), $latest_dawn_time);
-  addFact("Latest sunrise at ".t($latest_rise_time), $latest_rise_time);
-  addFact("Earliest sunset at ".t($earliest_set_time), $earliest_set_time);
-  addFact("Earliest dusk at ".t($earliest_dusk_time), $earliest_dusk_time);
 
   # Find the shortest days and twilights.
   $short_day_length = min($day_lengths);
@@ -134,10 +129,29 @@ function computeFacts($lat, $lon, $tz) {
   $shortest_day = array_keys($day_lengths, $short_day_length);
   $shortest_twi = array_keys($twi_lengths, $short_twi_length);
   $longest_night = array_keys($night_lengths, $long_night_length);
-  addFact("Shortest day (".dur($short_day_length).")", strtotime(end($shortest_day)));
-  addFact("Shortest twilight (".dur($short_twi_length).")", strtotime(end($shortest_twi)));
-  addFact("Longest night (".dur($long_night_length).") ends at sunrise", strtotime(end($longest_night)));
 
+  # Mention extremes based on whether they go to zero.
+  if ($short_twi_length != 0) {
+    addFact("Shortest twilight (".dur($short_twi_length).")", strtotime(end($shortest_twi)));
+    addFact("Latest dawn at ".t($latest_dawn_time), $latest_dawn_time);
+    addFact("Earliest dusk at ".t($earliest_dusk_time), $earliest_dusk_time);
+  }
+  else {
+    addFact("Last day of total darkness", strtotime(end($shortest_twi)));
+    addFact("First twilight begins at ".t($dawns['time'][nextDay(end($shortest_twi))]), strtotime(nextDay(end($shortest_twi))));
+  }
+  if ($short_day_length != 0) {
+    addFact("Shortest day (".dur($short_day_length).")", strtotime(end($shortest_day)));
+    addFact("Latest sunrise at ".t($latest_rise_time), $latest_rise_time);
+    addFact("Earliest sunset at ".t($earliest_set_time), $earliest_set_time);
+  }
+  else {
+    addFact("Last day with no direct sun", strtotime(end($shortest_day)));
+    addFact("First sunrise at ".t($rises['time'][nextDay(end($shortest_day))]), strtotime(nextDay(end($shortest_day))));
+  }
+  if ($long_night_length < 86400) {
+    addFact("Longest night (".dur($long_night_length).") ends at sunrise", strtotime(end($longest_night)));
+  }
 
   # Find various milestones.
   addMilestones("Day length is now up to %dur%", $day_lengths, $day_lengths, 1800, $solstice, $doldrums[1]);
@@ -180,6 +194,10 @@ function computeFacts($lat, $lon, $tz) {
   function addFact($text, $d=false, $timepoint=false) {
     global $facts;
 
+    # Don't add the fact if this is clearly a nil reference, or close to it.
+    # Otherwise, you'll get a calendar going back to 1970.
+    if ($d <= 1) { return; }
+
     if ($timepoint == true) {
       $facts[date("Y-m-d", $d)][] = $text." at ".date("H:i:s T", $d);
     }
@@ -219,6 +237,12 @@ function computeFacts($lat, $lon, $tz) {
     }
     $r .= $n;
     return $r;
+  }
+  function nextDay($d) {
+    return date("Y-m-d", strtotime("+1 day", $d));
+  }
+  function prevDay($d) {
+    return date("Y-m-d", strtotime("-1 day", $d));
   }
 
 ?>
