@@ -89,8 +89,8 @@ function computeFacts($lat, $lon, $tz) {
     $dusks['time'][$i] = $sun_info['civil_twilight_end'];
     $dusks['diff'][$i] = $dusks['time'][$i] - $d;
 
-    $day_lengths[$i] = $sets['diff'][$i] - $rises['diff'][$i];
-    $twi_lengths[$i] = $dusks['diff'][$i] - $dawns['diff'][$i];
+    $day_lengths[$i] = $sets['time'][$i] - $rises['time'][$i];
+    $twi_lengths[$i] = $dusks['time'][$i] - $dawns['time'][$i];
 
     # Only make comparisons to yesterday when in the doldrums.  (Avoids nil references, really.)
     if ($d >= $doldrums[0]) {
@@ -101,8 +101,8 @@ function computeFacts($lat, $lon, $tz) {
       $day_deltas[$i] = $day_lengths[$i] - $day_lengths[$y];
       $twi_deltas[$i] = $twi_lengths[$i] - $twi_lengths[$y];
 
-      $night_lengths[$i] = $rises['diff'][$i] - ($sets['diff'][$y] - 86400);
-      # NB: This technically has an edge case at discontinuities, but is generally avoided by doldrums definition.
+      # And calculate the length of the previous night while we're here.
+      $night_lengths[$i] = $rises['time'][$i] - $sets['time'][$y];
     }
 
     $d = strtotime("+1 day", $d);
