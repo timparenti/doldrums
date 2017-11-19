@@ -76,7 +76,7 @@ function computeFacts($lat, $lon, $tz) {
   $d = strtotime("-1 day", $doldrums[0]);
   while ($d <= $doldrums[1]) {
     $sun_info = date_sun_info($d, $lat, $lon);
-    $i = date("Y-m-d", $d);
+    $i = d($d);
 
     # Use "seconds since local noon" as a consistent "diff" metric,
     # while still storing the timestamps themselves.
@@ -170,11 +170,11 @@ function computeFacts($lat, $lon, $tz) {
   
   function addMilestones($text, $repl_array, $search_array, $factor, $start, $end, $direction=1) {
     $d = $start;
-    $i = date("Y-m-d", $d);
+    $i = d($d);
     $existing_quotient = intval($search_array[$i] / $factor);
 
     while ($d <= $end) {
-      $i = date("Y-m-d", $d);
+      $i = d($d);
       $new_quotient = intval($search_array[$i] / $factor);
       # Only add a fact when the movement in the specified direction is EXACTLY 1 band of width $factor;
       # this greatly reduces chance of an obvious DST discontinuity triggering the fact.
@@ -199,10 +199,10 @@ function computeFacts($lat, $lon, $tz) {
     if ($d <= 1) { return; }
 
     if ($timepoint == true) {
-      $facts[date("Y-m-d", $d)][] = $text." at ".date("H:i:s T", $d);
+      $facts[d($d)][] = $text." at ".date("H:i:s T", $d);
     }
     else {
-      $facts[date("Y-m-d", $d)][] = $text;
+      $facts[d($d)][] = $text;
     }
   }
 
@@ -230,6 +230,9 @@ function computeFacts($lat, $lon, $tz) {
   function t($t) {
     return date("H:i:s T", $t);
   }
+  function d($d) {
+    return date("Y-m-d", $d);
+  }
   function zPad($n, $dig) {
     $r = "";
     for ($i = strlen($n); $i < $dig; $i++) {
@@ -239,10 +242,10 @@ function computeFacts($lat, $lon, $tz) {
     return $r;
   }
   function nextDay($d) {
-    return date("Y-m-d", strtotime("+1 day", $d));
+    return d(strtotime("+1 day", $d));
   }
   function prevDay($d) {
-    return date("Y-m-d", strtotime("-1 day", $d));
+    return d(strtotime("-1 day", $d));
   }
 
 ?>
