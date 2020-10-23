@@ -25,6 +25,7 @@ echo "\n<head>";
 <style>
   #calendar .month-odd { background: #fff; }
   #calendar .month-even { background: #eee; }
+  #calendar tr { break-inside: avoid; }
 </style>
 <?php
 echo "\n</head>";
