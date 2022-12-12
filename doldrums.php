@@ -42,11 +42,15 @@ function computeFacts($lat, $lon, $tz) {
     }
     $d = strtotime("+1 day", $d);
   }
-  foreach ($discon['neg'] as $dis) {
-    addFact("Daylight Saving Time ends (fall back)", $dis);
+  if (count($discon['neg']) > 0) {
+    foreach ($discon['neg'] as $dis) {
+      addFact("Daylight Saving Time ends (fall back)", $dis);
+    }
   }
-  foreach ($discon['pos'] as $dis) {
-    addFact("Daylight Saving Time begins (spring forward)", $dis);
+  if (count($discon['pos']) > 0) {
+    foreach ($discon['pos'] as $dis) {
+      addFact("Daylight Saving Time begins (spring forward)", $dis);
+    }
   }
 
   # Bound the doldrums.
