@@ -163,7 +163,7 @@ function computeFacts($lat, $lon, $tz) {
   addMilestones("Dawn is now as early as %t%", $dawns['time'], $dawns['diff'], 1800, $solstice, $doldrums[1], -1);
   addMilestones("Sunrise is now as early as %t%", $rises['time'], $rises['diff'], 1800, $solstice, $doldrums[1], -1);
   addMilestones("Sunset is now as late as %t%", $sets['time'], $sets['diff'], 1800, $solstice, $doldrums[1]);
-  addMilestones("Dusk is now as late as %t%", $dusk['time'], $dusk['diff'], 1800, $solstice, $doldrums[1]);
+  addMilestones("Dusk is now as late as %t%", $dusks['time'], $dusks['diff'], 1800, $solstice, $doldrums[1]);
 
   addMilestones("Day length is increasing by %dur% per day", $day_deltas, $day_deltas, 30, $solstice, $doldrums[1]);
   addMilestones("Sunrise is getting %dur% earlier each day", $rise_deltas, $rise_deltas, 30, $solstice, $doldrums[1], -1);
@@ -232,10 +232,10 @@ function computeFacts($lat, $lon, $tz) {
     return $r;
   }
   function t($t) {
-    return date("H:i:s T", $t);
+    return date("H:i:s T", intval($t));
   }
   function d($d) {
-    return date("Y-m-d", $d);
+    return date("Y-m-d", intval($d));
   }
   function zPad($n, $dig) {
     $r = "";

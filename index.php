@@ -58,7 +58,7 @@ while ($d <= strtotime("next Sunday", $end_date)) {
   # Print the day.
   echo "\n<td class=\"month-".( date("n", $d) % 2 == 0 ? "even" : "odd" )."\">";
   echo date("\nd F Y", $d);
-  if (count($facts[$i]) > 0) {
+  if (array_key_exists($i, $facts)) {
     echo "\n<ul>";
     foreach ($facts[$i] as $fact) {
       echo "\n<li>".$fact."</li>";

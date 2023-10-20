@@ -14,7 +14,7 @@ function date_season($t=-1) {
 }
 
 function date_equisol($year,$i) {
-  return TDTtoUTC(JDtoGregTime(calcEquiSolTDT($year,$i)));
+  return intval(TDTtoUTC(JDtoGregTime(calcEquiSolTDT($year,$i))));
 }
 
 //-----Calculate and Display a single event for a single year (Either a Equiniox or Solstice)
@@ -97,7 +97,7 @@ function JDtoGregTime($JD) {
   $fracUTCDays = ($JD+0.5) - $wholeUTCDays;
   
   $dateStr = JDtoGregorian($wholeUTCDays);
-  $timeStr = gmdate("H:i:s",$fracUTCDays * 86400);
+  $timeStr = gmdate("H:i:s",intval($fracUTCDays * 86400));
   
   $date = strtotime($dateStr." ".$timeStr." UTC");
   
