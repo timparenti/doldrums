@@ -134,7 +134,12 @@ function computeFacts($lat, $lon, $tz) {
   $shortest_twi = array_keys($twi_lengths, $short_twi_length);
   $longest_night = array_keys($night_lengths, $long_night_length);
 
-  # Mention extremes based on whether they go to zero.
+  # Mention longest night as long as it's not all 24 hours.
+  if ($long_night_length < 86400) {
+    addFact("Longest night (".dur($long_night_length).") ends at sunrise", strtotime(end($longest_night)));
+  }
+
+  # Mention other extremes based on whether they go to zero.
   if ($short_twi_length != 0) {
     addFact("Shortest twilight (".dur($short_twi_length).")", strtotime(end($shortest_twi)));
     addFact("Latest dawn at ".t($latest_dawn_time), $latest_dawn_time);
@@ -152,9 +157,6 @@ function computeFacts($lat, $lon, $tz) {
   else {
     addFact("Last day with no direct sun", strtotime(end($shortest_day)));
     addFact("First sunrise at ".t($rises['time'][nextDay(end($shortest_day))]), strtotime(nextDay(end($shortest_day))));
-  }
-  if ($long_night_length < 86400) {
-    addFact("Longest night (".dur($long_night_length).") ends at sunrise", strtotime(end($longest_night)));
   }
 
   # Find various milestones.
