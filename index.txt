@@ -19,8 +19,7 @@ $start_date = strtotime(min(array_keys($facts)));
 $end_date = strtotime(max(array_keys($facts)));
 
 # Print the facts.
-echo "<pre>";
-echo "\nPOSITIVE THOUGHTS FOR THE DOLDRUMS OF ".$print_year;
+echo "POSITIVE THOUGHTS FOR THE DOLDRUMS OF ".$print_year;
 echo "\ncustomized to (lat ".$lat.", lon ".$lon.")\n";
 $d = $start_date;
 while ($d <= $end_date) {
@@ -34,6 +33,5 @@ while ($d <= $end_date) {
   }
   $d = strtotime("+1 day", $d);
 }
-echo "</pre>";
 
 ?>

@@ -18,7 +18,7 @@ function computeFacts($lat, $lon, $tz) {
   else {
     $year = ( date("n", $now) >= 7 ? date("Y", $now) : date("Y", $now) - 1 );
     $bounds = array( strtotime($year."-07-01 12:00"), strtotime(($year+1)."-06-30 12:00") );
-    $print_year = $year."-".($year+1);
+    $print_year = $year."–".($year+1);
     $solstice = date_equisol($year,3);
     $equinox = date_equisol($year+1,0);
   }
@@ -220,16 +220,16 @@ function computeFacts($lat, $lon, $tz) {
       $r .= $h."h";
       $dur %= 3600;
       $m = intval($dur/60);
-      $r .= zPad($m,2)."&#x2032;";
+      $r .= zPad($m,2)."′"; # single-prime, &#x2032;
       $dur %= 60;
     }
     else {
       $m = intval($dur/60);
-      $r .= $m."&#x2032;";
+      $r .= $m."′"; # single-prime, &#x2032;
       $dur %= 60;
     }
     $s = $dur;
-    $r .= zPad($s,2)."&#x2033;";
+    $r .= zPad($s,2)."″"; # double-prime, &#x2033;
 
     return $r;
   }

@@ -20,7 +20,7 @@ $start_date = strtotime(min(array_keys($facts)));
 $end_date = strtotime(max(array_keys($facts)));
 
 echo "\n<head>";
-  echo "\n<title>Positive thoughts for the Doldrums of ".$print_year."</title>";
+  echo "\n<title>Positive thoughts for the Doldrums of ".htmlentities($print_year)."</title>";
 ?>
 <style>
   #calendar .month-odd { background: #fff; }
@@ -33,7 +33,7 @@ echo "\n<body>";
 echo "\n";
 
 # Print the facts.
-echo "<h2>POSITIVE THOUGHTS FOR THE DOLDRUMS OF ".$print_year."</h2>";
+echo "<h2>POSITIVE THOUGHTS FOR THE DOLDRUMS OF ".htmlentities($print_year)."</h2>";
 echo "<h3>customized to (lat ".$lat.", lon ".$lon.")</h3>";
 
 echo "\n<table border=1 id=\"calendar\">";
@@ -61,7 +61,7 @@ while ($d <= strtotime("next Sunday", $end_date)) {
   if (array_key_exists($i, $facts)) {
     echo "\n<ul>";
     foreach ($facts[$i] as $fact) {
-      echo "\n<li>".$fact."</li>";
+      echo "\n<li>".htmlentities($fact)."</li>";
     }
     echo "\n</ul>";
   }
