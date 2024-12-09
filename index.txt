@@ -26,7 +26,7 @@ $d = $start_date;
 while ($d <= $end_date) {
   $i = date("Y-m-d", $d);
   
-  if (count($facts[$i]) > 0) {
+  if (array_key_exists($i, $facts)) {
     echo date("\nd F Y (D)", $d);
     foreach ($facts[$i] as $fact) {
       echo "\n  - ".$fact;
