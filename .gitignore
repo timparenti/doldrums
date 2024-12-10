@@ -1,0 +1,11 @@
+# Common temporary files
+*.swp
+.DS_Store
+
+# Output formats, except the scripts that make them
+*.txt
+!index.*
+
+# Secondary output formats
+*.htm
+*.pdf
