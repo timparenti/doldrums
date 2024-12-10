@@ -1,0 +1,68 @@
+<?php
+
+# Set location and timezone.
+#$lat = -33.87; $lon = 151.21; $tz = "Australia/Sydney";
+#$lat = 51.51; $lon = -0.13; $tz = "Europe/London";
+#$lat = -22.91; $lon = -43.17; $tz = "America/Sao_Paulo";
+#$lat = 69.65; $lon = 18.96; $tz = "Europe/Oslo";
+#$lat = 55.76; $lon = 37.62; $tz = "Europe/Moscow";
+#$lat = 42.00; $lon = -80.18; $tz = "America/New_York";
+$lat = 40.44; $lon = -79.95; $tz = "America/New_York";
+
+
+# Compute the facts.
+require_once('doldrums.php');
+computeFacts($lat, $lon, $tz);
+
+
+$start_date = strtotime(min(array_keys($facts)));
+$end_date = strtotime(max(array_keys($facts)));
+
+$r = "";
+# Print the facts.
+$r .= iCalLine("BEGIN:VCALENDAR");
+$r .= iCalLine("PRODID:-//Tim Parenti//doldrums//EN");
+$r .= iCalLine("VERSION:2.0");
+$r .= iCalLine("CALSCALE:GREGORIAN");
+$r .= iCalLine("METHOD:PUBLISH");
+$r .= iCalLine("CLASS:PUBLIC");
+$r .= iCalLine("X-WR-CALNAME:Positive thoughts for the Doldrums of ".$print_year." (lat ".$lat.", lon ".$lon.")");
+$r .= iCalLine("X-WR-TIMEZONE:".$tz."");
+# A more robust "VTIMEZONE" calendar component could be incorporated here by
+# loading from and parsing https://www.tzurl.org/zoneinfo-outlook/$tz but this
+# would require online connectivity.
+$d = $start_date;
+while ($d <= $end_date) {
+  $i = date("Y-m-d", $d);
+
+  if (array_key_exists($i, $facts)) {
+    $n = 0;
+    foreach ($facts[$i] as $fact) {
+      $r .= iCalLine("BEGIN:VEVENT");
+      $r .= iCalLine("DTSTAMP:".gmdate("Ymd\THis\Z").""); # now
+      # Define as an all-day event:
+      $r .= iCalLine("DTSTART;VALUE=DATE:".date("Ymd", $d)."");
+      $r .= iCalLine("DTEND;VALUE=DATE:".date("Ymd", strtotime("+1 day", $d))."");
+      $r .= iCalLine("UID:doldrums_".$lat."_".$lon."_".date("Ymd", $d)."_".$n++."@doldrums.github.timparenti.com");
+      $r .= iCalLine("SUMMARY:".$fact."");
+      $r .= iCalLine("STATUS:CONFIRMED");
+      $r .= iCalLine("TRANSP:TRANSPARENT"); # treat as "free"
+      # A "VALARM" calendar component could be added here.  Ideally, its
+      # "TRIGGER" property would be a relevant absolute calendar date-time, but
+      # this would require re-architecting computeFacts().
+      $r .= iCalLine("END:VEVENT");
+    }
+  }
+  $d = strtotime("+1 day", $d);
+}
+$r .= iCalLine("END:VCALENDAR");
+
+echo $r;
+
+function iCalLine($text) {
+  # "Fold" text at 75 characters with leading spaces per the iCalendar
+  # standard.
+  return rtrim(chunk_split($text, 75, "\r\n "), "\r\n ")."\r\n";
+}
+
+?>

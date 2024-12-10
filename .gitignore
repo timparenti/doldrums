@@ -4,6 +4,7 @@
 
 # Output formats, except the scripts that make them
 *.txt
+*.ics
 !index.*
 
 # Secondary output formats
